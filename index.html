@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spot the Masterpiece</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Spot the Masterpiece Logo" class="logo-img">
+            <span>Spot the masterpiece</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="showScreen('home-screen')" class="active">Home</a>
+            <a href="#" onclick="showScreen('home-screen')">Play Now</a>
+            <a href="#" onclick="showScreen('how-to-play-screen')">How to Play</a>
+            <a href="#" onclick="showScreen('home-screen')">Leaderboard</a>
+        </div>
+    </nav>
+
+    <div id="app-container">
+        
+        <!-- 1. HOME SCREEN (Split Layout) -->
+        <div id="home-screen" class="screen active">
+            <div class="split-layout">
+                <!-- Left Side: Gallery Background Visual -->
+                <div class="left-pane"></div>
+                
+                <!-- Right Side: Player Input & Leaderboard -->
+                <div class="right-pane">
+                    
+                    <!-- Play Card -->
+                    <div class="card play-card">
+                        <h2>READY TO PLAY?</h2>
+                        <div class="input-group">
+                            <label for="username">Player Name</label>
+                            <input type="text" id="username" placeholder="Enter your nickname...">
+                        </div>
+                        
+                        <div class="difficulty-selection">
+                            <div class="diff-btn" data-diff="easy">
+                                <span class="icon">👤</span>
+                                <span>EASY</span>
+                            </div>
+                            <div class="diff-btn" data-diff="medium">
+                                <span class="icon">📈</span>
+                                <span>MEDIUM</span>
+                            </div>
+                            <div class="diff-btn" data-diff="hard">
+                                <span class="icon">🔥</span>
+                                <span>HARD</span>
+                            </div>
+                        </div>
+                        
+                        <button id="start-btn" class="gradient-btn">START GAME</button>
+                    </div>
+
+                    <!-- Leaderboard Card -->
+                    <div class="card leaderboard-card">
+                        <h3>LEADERBOARD</h3>
+                        <h2>TOP 10 HIGH SCORES</h2>
+                        <div class="leaderboard-tabs">
+                            <button class="tab-btn active" onclick="switchLeaderboardTab('easy', this)">Easy</button>
+                            <button class="tab-btn" onclick="switchLeaderboardTab('medium', this)">Medium</button>
+                            <button class="tab-btn" onclick="switchLeaderboardTab('hard', this)">Hard</button>
+                        </div>
+                        <ul id="leaderboard-list">
+                            <!-- Populated dynamically via JS -->
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. HOW TO PLAY SCREEN -->
+        <div id="how-to-play-screen" class="screen">
+            <div class="content-box">
+                <h2>How to Play</h2>
+                <p class="subtitle">Test your art intuition and history knowledge across 10 exercises!</p>
+                
+                <div class="rules-grid">
+                    <div class="rule-card">
+                        <h3>1. Identify the Original</h3>
+                        <p>In every exercise, you are shown 4 images of famous artworks. 3 are modified fakes, and only 1 is the authentic original masterpiece. Inspect them carefully before choosing!</p>
+                    </div>
+                    
+                    <div class="rule-card">
+                        <h3>2. Select Difficulty & Earn Points</h3>
+                        <ul>
+                            <li><strong>Easy Mode (100 Pts Max):</strong> Guess only the authentic image (10 pts per exercise).</li>
+                            <li><strong>Medium Mode (100 Pts Max):</strong> Guess the authentic image (5 pts) + identify the correct artist (5 pts).</li>
+                            <li><strong>Hard Mode (100 Pts Max):</strong> Guess the authentic image (3.33 pts) + artist (3.33 pts) + century created (3.33 pts).</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card">
+                        <h3>3. Review & Discover</h3>
+                        <p>After completing all 10 exercises, submit your answers to see a side-by-side comparison of your choices versus the original masterpieces, along with detailed art history backstories!</p>
+                    </div>
+                </div>
+
+                <button class="gradient-btn back-btn" onclick="showScreen('home-screen')">Back to Home</button>
+            </div>
+        </div>
+
+        <!-- 3. QUIZ SCREEN -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <h2 id="progress-text">Exercise 1 / 10</h2>
+                </div>
+                
+                <h3 id="question-prompt">Which picture is the original authentic masterpiece?</h3>
+                
+                <div id="image-grid">
+                    <!-- Images injected here -->
+                </div>
+
+                <div id="extra-questions-container" style="display: none;">
+                    <div id="artist-question" class="question-block">
+                        <h4>Who painted / created this artwork?</h4>
+                        <div id="artist-options" class="options-grid"></div>
+                    </div>
+                    <div id="century-question" class="question-block" style="display: none;">
+                        <h4>In which century was this artwork created?</h4>
+                        <div id="century-options" class="options-grid"></div>
+                    </div>
+                </div>
+
+                <button id="submit-answer-btn" class="gradient-btn">Submit Answer</button>
+            </div>
+        </div>
+
+        <!-- 4. RESULTS SCREEN -->
+        <div id="results-screen" class="screen">
+            <div class="results-container">
+                <h2>Game Over!</h2>
+                <h3 id="final-score">Your Final Score: 0 / 100</h3>
+                <div id="comparison-container">
+                    <!-- Comparisons injected here -->
+                </div>
+                <button class="gradient-btn" onclick="location.reload()">Play Again</button>
+            </div>
+        </div>
+
+        <!-- Info Modal -->
+        <div id="info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2 id="modal-title">Artwork Story & Historical Context</h2>
+                <p><strong>Artist:</strong> <span id="modal-artist"></span></p>
+                <p><strong>Year / Period:</strong> <span id="modal-year"></span></p>
+                <p><strong>Century:</strong> <span id="modal-century"></span></p>
+                <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+                <p id="modal-desc" class="modal-text"></p>
+            </div>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
